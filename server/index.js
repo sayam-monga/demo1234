@@ -29,9 +29,9 @@ mongoose.connect(process.env.MONGODB_URI)
   .then(() => console.log('MongoDB connected'))
   .catch(err => console.error('MongoDB connection error:', err));
 
-// Define Booking Schema
-const bookingSchema = new mongoose.Schema({
-  ticketType: {
+// Define Ticket Schema (as part of the booking)
+const ticketSchema = new mongoose.Schema({
+  type: {
     type: String,
     required: true,
     enum: ['STAG', 'COUPLE']
@@ -40,6 +40,15 @@ const bookingSchema = new mongoose.Schema({
     type: Number,
     required: true
   },
+  price: {
+    type: Number,
+    required: true
+  }
+});
+
+// Define Booking Schema
+const bookingSchema = new mongoose.Schema({
+  tickets: [ticketSchema],
   totalAmount: {
     type: Number,
     required: true
@@ -53,6 +62,10 @@ const bookingSchema = new mongoose.Schema({
     required: true
   },
   phone: {
+    type: String,
+    required: true
+  },
+  userId: {
     type: String,
     required: true
   },
@@ -128,7 +141,12 @@ app.post('/api/verify-payment', async (req, res) => {
     
     // Create new booking in database
     const newBooking = new Booking({
-      ...formData,
+      tickets: formData.tickets,
+      totalAmount: formData.totalAmount,
+      name: formData.name,
+      email: formData.email,
+      phone: formData.phone,
+      userId: formData.userId,
       paymentId: razorpay_payment_id,
       bookingId: bookingId
     });
@@ -142,6 +160,18 @@ app.post('/api/verify-payment', async (req, res) => {
   } catch (error) {
     console.error('Error verifying payment:', error);
     res.status(500).json({ message: 'Error verifying payment' });
+  }
+});
+
+// Get all bookings for a user
+app.get('/api/bookings/user/:email', async (req, res) => {
+  try {
+    const { email } = req.params;
+    const bookings = await Booking.find({ email });
+    res.json(bookings);
+  } catch (error) {
+    console.error('Error fetching user bookings:', error);
+    res.status(500).json({ message: 'Error fetching bookings' });
   }
 });
 

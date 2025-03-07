@@ -1,11 +1,15 @@
 
 import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useUser, useClerk, SignInButton, UserButton } from "@clerk/clerk-react";
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { isSignedIn } = useUser();
+  const { signOut } = useClerk();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -19,6 +23,10 @@ const Navbar = () => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  const handleSignOut = () => {
+    signOut(() => navigate("/"));
+  };
 
   return (
     <nav 
@@ -53,6 +61,24 @@ const Navbar = () => {
             <Link to="/about" className="text-white/90 hover:text-bollywood-red transition-colors duration-300">
               About
             </Link>
+            
+            {isSignedIn ? (
+              <>
+                <Link to="/my-passes" className="text-white/90 hover:text-bollywood-red transition-colors duration-300">
+                  My Passes
+                </Link>
+                <div className="flex items-center space-x-4">
+                  <UserButton afterSignOutUrl="/" />
+                </div>
+              </>
+            ) : (
+              <SignInButton mode="modal">
+                <button className="text-white/90 hover:text-bollywood-red transition-colors duration-300">
+                  Sign In
+                </button>
+              </SignInButton>
+            )}
+            
             <Link 
               to="/checkout" 
               className="bg-bollywood-red text-white px-4 py-2 rounded-lg hover:bg-bollywood-red/90 transition-all duration-300"
@@ -74,7 +100,7 @@ const Navbar = () => {
       {/* Mobile Menu */}
       <div 
         className={`md:hidden absolute w-full bg-bollywood-dark-accent/95 backdrop-blur-lg transition-all duration-300 ease-in-out ${
-          isMenuOpen ? "max-h-[300px] py-4 opacity-100" : "max-h-0 py-0 opacity-0 overflow-hidden"
+          isMenuOpen ? "max-h-[400px] py-4 opacity-100" : "max-h-0 py-0 opacity-0 overflow-hidden"
         }`}
       >
         <div className="container mx-auto px-4 flex flex-col space-y-4">
@@ -106,6 +132,37 @@ const Navbar = () => {
           >
             About
           </Link>
+          
+          {isSignedIn ? (
+            <>
+              <Link 
+                to="/my-passes" 
+                className="text-white/90 hover:text-bollywood-red transition-colors duration-300 py-2"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                My Passes
+              </Link>
+              <button
+                onClick={() => {
+                  handleSignOut();
+                  setIsMenuOpen(false);
+                }}
+                className="text-white/90 hover:text-bollywood-red transition-colors duration-300 py-2 text-left"
+              >
+                Sign Out
+              </button>
+            </>
+          ) : (
+            <SignInButton mode="modal">
+              <button 
+                className="text-white/90 hover:text-bollywood-red transition-colors duration-300 py-2 text-left"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Sign In
+              </button>
+            </SignInButton>
+          )}
+          
           <Link 
             to="/checkout" 
             className="bg-bollywood-red text-white px-4 py-2 rounded-lg hover:bg-bollywood-red/90 transition-all duration-300 inline-block w-full text-center"

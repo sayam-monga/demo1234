@@ -8,18 +8,27 @@ interface TicketCardProps {
   price: number;
   description: string;
   features: string[];
+  onQuantityChange?: (type: 'STAG' | 'COUPLE', quantity: number) => void;
 }
 
-const TicketCard = ({ type, price, description, features }: TicketCardProps) => {
+const TicketCard = ({ type, price, description, features, onQuantityChange }: TicketCardProps) => {
   const [quantity, setQuantity] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
 
   const incrementQuantity = () => {
-    setQuantity(prev => Math.min(prev + 1, 10));
+    const newQuantity = Math.min(quantity + 1, 10);
+    setQuantity(newQuantity);
+    if (onQuantityChange) {
+      onQuantityChange(type, newQuantity);
+    }
   };
 
   const decrementQuantity = () => {
-    setQuantity(prev => Math.max(prev - 1, 0));
+    const newQuantity = Math.max(quantity - 1, 0);
+    setQuantity(newQuantity);
+    if (onQuantityChange) {
+      onQuantityChange(type, newQuantity);
+    }
   };
 
   const capacityPercentage = Math.floor(Math.random() * 30) + 60; // Random between 60-90%
@@ -84,19 +93,21 @@ const TicketCard = ({ type, price, description, features }: TicketCardProps) => 
         {/* Quantity selector */}
         <div className="flex items-center justify-between mb-5">
           <div className="text-white/80 text-sm">Quantity:</div>
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center space-x-4">
             <button 
-              className="text-white/80 hover:text-bollywood-red transition-colors"
+              className="w-8 h-8 rounded-full flex items-center justify-center bg-white/10 text-white hover:bg-bollywood-red/20 transition-colors"
               onClick={decrementQuantity}
+              disabled={quantity <= 0}
             >
-              <MinusCircle size={20} />
+              <MinusCircle size={18} />
             </button>
             <span className="text-white font-medium w-6 text-center">{quantity}</span>
             <button 
-              className="text-white/80 hover:text-bollywood-red transition-colors"
+              className="w-8 h-8 rounded-full flex items-center justify-center bg-white/10 text-white hover:bg-bollywood-red/20 transition-colors"
               onClick={incrementQuantity}
+              disabled={quantity >= 10}
             >
-              <PlusCircle size={20} />
+              <PlusCircle size={18} />
             </button>
           </div>
         </div>
@@ -110,6 +121,7 @@ const TicketCard = ({ type, price, description, features }: TicketCardProps) => 
         {/* Buy button */}
         <Link 
           to={quantity > 0 ? "/checkout" : "#"}
+          state={quantity > 0 ? { ticketType: type, quantity, price } : undefined}
           className={`w-full block text-center py-3 rounded-lg font-medium transition-all duration-300 ${
             quantity > 0 
               ? "bg-bollywood-red text-white hover:shadow-red-glow" 
