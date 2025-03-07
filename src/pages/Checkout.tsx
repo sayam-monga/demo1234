@@ -25,7 +25,7 @@ const steps = [
 ];
 
 // API URL - should be in environment variable in production
-const API_URL = "http://localhost:5000/api";
+const API_URL = "https://true-ticket-api.onrender.com/api";
 
 interface TicketSelection {
   type: "STAG" | "COUPLE";

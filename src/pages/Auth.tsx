@@ -7,7 +7,7 @@ import FooterSection from "../components/FooterSection";
 import { Mail, Lock, User, Phone, ArrowLeft } from "lucide-react";
 
 // API URL - should be in environment variable in production
-const API_URL = "http://localhost:5000/api";
+const API_URL = "https://true-ticket-api.onrender.com/api";
 
 const Auth = () => {
   const navigate = useNavigate();
