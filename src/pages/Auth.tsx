@@ -69,9 +69,7 @@ const Auth = () => {
     setLoading(true);
 
     try {
-      const endpoint = isLogin
-        ? `${API_URL}/auth/login`
-        : `${API_URL}/auth/register`;
+      const endpoint = isLogin ? `${API_URL}/login` : `${API_URL}/register`;
 
       const response = await axios.post(endpoint, formData);
 
