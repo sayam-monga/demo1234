@@ -1,17 +1,22 @@
-
-import { useState } from 'react';
-import { PlusCircle, MinusCircle, Info, Users, User } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { useState } from "react";
+import { PlusCircle, MinusCircle, Info, Users, User } from "lucide-react";
+import { Link } from "react-router-dom";
 
 interface TicketCardProps {
-  type: 'STAG' | 'COUPLE';
+  type: "STAG" | "COUPLE";
   price: number;
   description: string;
   features: string[];
-  onQuantityChange?: (type: 'STAG' | 'COUPLE', quantity: number) => void;
+  onQuantityChange?: (type: "STAG" | "COUPLE", quantity: number) => void;
 }
 
-const TicketCard = ({ type, price, description, features, onQuantityChange }: TicketCardProps) => {
+const TicketCard = ({
+  type,
+  price,
+  description,
+  features,
+  onQuantityChange,
+}: TicketCardProps) => {
   const [quantity, setQuantity] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
 
@@ -34,7 +39,7 @@ const TicketCard = ({ type, price, description, features, onQuantityChange }: Ti
   const capacityPercentage = Math.floor(Math.random() * 30) + 60; // Random between 60-90%
 
   return (
-    <div 
+    <div
       className="ticket-card"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
@@ -42,19 +47,25 @@ const TicketCard = ({ type, price, description, features, onQuantityChange }: Ti
       {/* Tag */}
       <div className="absolute top-0 right-0">
         <div className="bg-bollywood-red text-white text-xs font-medium px-3 py-1 rounded-bl-lg">
-          {type === 'STAG' ? 'SOLO' : 'DUO'}
+          {type === "STAG" ? "SOLO" : "DUO"}
         </div>
       </div>
-      
+
       {/* Content */}
       <div className="p-6">
         <div className="flex justify-between items-start mb-4">
           <div>
             <h3 className="text-xl font-bold text-white mb-1 flex items-center">
-              {type === 'STAG' ? (
-                <User className="inline-block mr-2 text-bollywood-red" size={18} />
+              {type === "STAG" ? (
+                <User
+                  className="inline-block mr-2 text-bollywood-red"
+                  size={18}
+                />
               ) : (
-                <Users className="inline-block mr-2 text-bollywood-red" size={18} />
+                <Users
+                  className="inline-block mr-2 text-bollywood-red"
+                  size={18}
+                />
               )}
               {type} Entry
             </h3>
@@ -65,7 +76,7 @@ const TicketCard = ({ type, price, description, features, onQuantityChange }: Ti
             <p className="text-white/60 text-xs">per ticket</p>
           </div>
         </div>
-        
+
         {/* Features */}
         <ul className="space-y-2 mb-5">
           {features.map((feature, index) => (
@@ -75,34 +86,24 @@ const TicketCard = ({ type, price, description, features, onQuantityChange }: Ti
             </li>
           ))}
         </ul>
-        
+
         {/* Capacity bar */}
-        <div className="mb-5">
-          <div className="flex justify-between text-xs text-white/70 mb-1">
-            <span>Available</span>
-            <span>{capacityPercentage}% remaining</span>
-          </div>
-          <div className="w-full h-2 bg-white/10 rounded-full overflow-hidden">
-            <div 
-              className="h-full bg-gradient-to-r from-bollywood-red to-bollywood-red/80"
-              style={{ width: `${capacityPercentage}%` }}
-            ></div>
-          </div>
-        </div>
-        
+
         {/* Quantity selector */}
         <div className="flex items-center justify-between mb-5">
           <div className="text-white/80 text-sm">Quantity:</div>
           <div className="flex items-center space-x-4">
-            <button 
+            <button
               className="w-8 h-8 rounded-full flex items-center justify-center bg-white/10 text-white hover:bg-bollywood-red/20 transition-colors"
               onClick={decrementQuantity}
               disabled={quantity <= 0}
             >
               <MinusCircle size={18} />
             </button>
-            <span className="text-white font-medium w-6 text-center">{quantity}</span>
-            <button 
+            <span className="text-white font-medium w-6 text-center">
+              {quantity}
+            </span>
+            <button
               className="w-8 h-8 rounded-full flex items-center justify-center bg-white/10 text-white hover:bg-bollywood-red/20 transition-colors"
               onClick={incrementQuantity}
               disabled={quantity >= 10}
@@ -111,20 +112,24 @@ const TicketCard = ({ type, price, description, features, onQuantityChange }: Ti
             </button>
           </div>
         </div>
-        
+        <hr className="py-2" />
         {/* Total */}
         <div className="flex justify-between items-center mb-5">
           <div className="text-white/80">Total:</div>
-          <div className="text-xl font-bold text-white">₹{price * quantity}</div>
+          <div className="text-xl font-bold text-white">
+            ₹{price * quantity}
+          </div>
         </div>
-        
+
         {/* Buy button */}
-        <Link 
+        <Link
           to={quantity > 0 ? "/checkout" : "#"}
-          state={quantity > 0 ? { ticketType: type, quantity, price } : undefined}
+          state={
+            quantity > 0 ? { ticketType: type, quantity, price } : undefined
+          }
           className={`w-full block text-center py-3 rounded-lg font-medium transition-all duration-300 ${
-            quantity > 0 
-              ? "bg-bollywood-red text-white hover:shadow-red-glow" 
+            quantity > 0
+              ? "bg-bollywood-red text-white hover:shadow-red-glow"
               : "bg-white/10 text-white/50 cursor-not-allowed"
           }`}
         >

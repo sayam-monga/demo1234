@@ -7,8 +7,8 @@ import { useEffect } from "react";
 import Index from "./pages/Index";
 import Checkout from "./pages/Checkout";
 import MyPasses from "./pages/MyPasses";
+import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
-import { ClerkProvider, SignIn, SignUp } from "@clerk/clerk-react";
 
 const queryClient = new QueryClient();
 
@@ -38,14 +38,7 @@ const App = () => {
             <Route path="/" element={<Index />} />
             <Route path="/checkout" element={<Checkout />} />
             <Route path="/my-passes" element={<MyPasses />} />
-            <Route
-              path="/sign-in/*"
-              element={<SignIn routing="path" path="/sign-in" />}
-            />
-            <Route
-              path="/sign-up/*"
-              element={<SignUp routing="path" path="/sign-up" />}
-            />
+            <Route path="/auth" element={<Auth />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
