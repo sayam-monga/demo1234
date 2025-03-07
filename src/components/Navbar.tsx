@@ -135,27 +135,6 @@ const Navbar = () => {
           >
             Home
           </Link>
-          <Link
-            to="/events"
-            className="text-white/90 hover:text-bollywood-red transition-colors duration-300 py-2"
-            onClick={() => setIsMenuOpen(false)}
-          >
-            Events
-          </Link>
-          <Link
-            to="/gallery"
-            className="text-white/90 hover:text-bollywood-red transition-colors duration-300 py-2"
-            onClick={() => setIsMenuOpen(false)}
-          >
-            Gallery
-          </Link>
-          <Link
-            to="/about"
-            className="text-white/90 hover:text-bollywood-red transition-colors duration-300 py-2"
-            onClick={() => setIsMenuOpen(false)}
-          >
-            About
-          </Link>
 
           {isLoggedIn ? (
             <>
