@@ -69,7 +69,9 @@ const Auth = () => {
     setLoading(true);
 
     try {
-      const endpoint = isLogin ? `${API_URL}/login` : `${API_URL}/register`;
+      const endpoint = isLogin
+        ? `${API_URL}/auth/login`
+        : `${API_URL}/auth/register`;
 
       const response = await axios.post(endpoint, formData);
 
@@ -82,7 +84,7 @@ const Auth = () => {
           isLogin ? "Logged in successfully!" : "Account created successfully!"
         );
 
-        // Redirect based on previous location or to home
+        // Redirect based on previous location  or to home
         navigate(-1);
       } else {
         toast.error(response.data.message || "Authentication failed");

@@ -73,7 +73,7 @@ const Checkout = () => {
           name: userData?.name || prev.name,
           email: userData?.email || prev.email,
           phone: userData?.phone || prev.phone,
-          userId: userData?.id || prev.userId, // Ensure userId is updated if available
+          userId: userData?.userId || prev.userId, // Ensure userId is updated if available
         }));
       } catch (error) {
         console.error("Error parsing user data", error);
@@ -553,11 +553,17 @@ const Checkout = () => {
                     />
                     <span className="text-white/70 text-sm">
                       I agree to the{" "}
-                      <a href="#" className="text-bollywood-red">
+                      <a
+                        href="https://merchant.razorpay.com/policy/Q3r6azfgbxrH03/refund"
+                        className="text-bollywood-red"
+                      >
                         Terms and Conditions
                       </a>{" "}
                       and{" "}
-                      <a href="#" className="text-bollywood-red">
+                      <a
+                        href="https://merchant.razorpay.com/policy/Q3r6azfgbxrH03/refund"
+                        className="text-bollywood-red"
+                      >
                         Privacy Policy
                       </a>
                     </span>

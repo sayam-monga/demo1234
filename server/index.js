@@ -12,7 +12,7 @@ dotenv.config();
 // Initialize Express
 const app = express();
 const PORT = process.env.PORT || 5000;
-
+const JWT_SECRET = process.env.JWT_SECRET;
 // Middleware
 app.use(cors());
 app.use(bodyParser.json());
@@ -149,6 +149,7 @@ app.post("/api/verify-payment", async (req, res) => {
       userId: formData.userId,
       paymentId: razorpay_payment_id,
       bookingId: bookingId,
+      status: "CONFIRMED", // Ensure status is set
     });
 
     await newBooking.save();
@@ -186,6 +187,7 @@ app.get("/api/bookings", async (req, res) => {
   }
 });
 // Add this authentication middleware function
+
 const auth = (req, res, next) => {
   try {
     // Check if Authorization header exists
