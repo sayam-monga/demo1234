@@ -3,8 +3,9 @@ import { useState } from 'react';
 import { ArrowLeft, Check, AlertCircle } from 'lucide-react';
 import Navbar from '../components/Navbar';
 import FooterSection from '../components/FooterSection';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
+import axios from 'axios';
 
 // Simplified checkout steps
 const steps = [
@@ -14,7 +15,11 @@ const steps = [
   { id: 'confirm', label: 'Confirmation' }
 ];
 
+// API URL - should be in environment variable in production
+const API_URL = 'http://localhost:5000/api';
+
 const Checkout = () => {
+  const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState('ticket');
   const [formData, setFormData] = useState({
     ticketType: 'STAG',
@@ -24,6 +29,8 @@ const Checkout = () => {
     phone: '',
     termsAccepted: false
   });
+  const [loading, setLoading] = useState(false);
+  const [bookingDetails, setBookingDetails] = useState(null);
   
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value, type } = e.target as HTMLInputElement;
@@ -32,6 +39,80 @@ const Checkout = () => {
       ...prev,
       [name]: type === 'checkbox' ? (e.target as HTMLInputElement).checked : value
     }));
+  };
+  
+  // Calculate price based on ticket type and quantity
+  const getPrice = () => {
+    const basePrice = formData.ticketType === 'STAG' ? 250 : 400;
+    return basePrice * formData.quantity;
+  };
+  
+  const initiateRazorpayPayment = async () => {
+    try {
+      setLoading(true);
+      
+      // Create order on server
+      const orderResponse = await axios.post(`${API_URL}/create-order`, {
+        amount: getPrice()
+      });
+      
+      const options = {
+        key: 'rzp_test_your_key_here', // Replace with your Razorpay key ID
+        amount: orderResponse.data.amount,
+        currency: orderResponse.data.currency,
+        name: 'Bollywood Night',
+        description: `${formData.ticketType} Ticket x ${formData.quantity}`,
+        order_id: orderResponse.data.id,
+        handler: async function (response: any) {
+          try {
+            // Verify payment with server
+            const verifyResponse = await axios.post(`${API_URL}/verify-payment`, {
+              razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_order_id: response.razorpay_order_id,
+              razorpay_signature: response.razorpay_signature,
+              formData: {
+                ...formData,
+                totalAmount: getPrice(),
+              }
+            });
+            
+            if (verifyResponse.data.success) {
+              setBookingDetails(verifyResponse.data.booking);
+              setCurrentStep('confirm');
+              toast.success("Payment processed successfully!");
+            } else {
+              toast.error("Payment verification failed");
+            }
+          } catch (error) {
+            console.error("Payment verification error:", error);
+            toast.error("Payment verification failed");
+          }
+        },
+        prefill: {
+          name: formData.name,
+          email: formData.email,
+          contact: formData.phone
+        },
+        theme: {
+          color: '#E63946'
+        },
+        modal: {
+          ondismiss: function() {
+            setLoading(false);
+            toast.error("Payment cancelled");
+          }
+        }
+      };
+      
+      // Initialize Razorpay
+      const razorpayInstance = new (window as any).Razorpay(options);
+      razorpayInstance.open();
+      
+    } catch (error) {
+      console.error("Payment initiation error:", error);
+      toast.error("Failed to initiate payment");
+      setLoading(false);
+    }
   };
   
   const handleNext = () => {
@@ -53,21 +134,14 @@ const Checkout = () => {
         nextStep = 'payment';
         break;
       case 'payment':
-        // Process payment (simplified for demo)
-        toast.success("Payment processed successfully!");
-        nextStep = 'confirm';
-        break;
+        // Initiate Razorpay payment
+        initiateRazorpayPayment();
+        return;
       default:
         nextStep = currentStep;
     }
     
     setCurrentStep(nextStep);
-  };
-  
-  // Calculate price based on ticket type and quantity
-  const getPrice = () => {
-    const basePrice = formData.ticketType === 'STAG' ? 250 : 400;
-    return basePrice * formData.quantity;
   };
   
   return (
@@ -244,37 +318,29 @@ const Checkout = () => {
                 <div className="p-4 bg-white/5 rounded-lg mb-6 flex items-center">
                   <AlertCircle className="text-bollywood-red mr-2" size={20} />
                   <p className="text-white/80 text-sm">
-                    This is a demo payment page. No actual payment will be processed.
+                    You'll be redirected to Razorpay to complete your payment securely.
                   </p>
                 </div>
                 
-                <div className="space-y-6 mb-8">
-                  <div>
-                    <label className="block text-white mb-2">Card Number</label>
-                    <input
-                      type="text"
-                      placeholder="1234 5678 9012 3456"
-                      className="w-full bg-white/5 border border-white/20 rounded-lg px-4 py-2 text-white"
-                    />
+                <div className="space-y-4 mb-8">
+                  <div className="flex justify-between p-3 bg-white/5 rounded-lg">
+                    <span className="text-white/70">Ticket Type:</span>
+                    <span className="text-white font-medium">{formData.ticketType} × {formData.quantity}</span>
                   </div>
                   
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-white mb-2">Expiry Date</label>
-                      <input
-                        type="text"
-                        placeholder="MM/YY"
-                        className="w-full bg-white/5 border border-white/20 rounded-lg px-4 py-2 text-white"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-white mb-2">CVV</label>
-                      <input
-                        type="text"
-                        placeholder="123"
-                        className="w-full bg-white/5 border border-white/20 rounded-lg px-4 py-2 text-white"
-                      />
-                    </div>
+                  <div className="flex justify-between p-3 bg-white/5 rounded-lg">
+                    <span className="text-white/70">Name:</span>
+                    <span className="text-white font-medium">{formData.name}</span>
+                  </div>
+                  
+                  <div className="flex justify-between p-3 bg-white/5 rounded-lg">
+                    <span className="text-white/70">Email:</span>
+                    <span className="text-white font-medium">{formData.email}</span>
+                  </div>
+                  
+                  <div className="flex justify-between p-3 bg-white/5 rounded-lg">
+                    <span className="text-white/70">Phone:</span>
+                    <span className="text-white font-medium">{formData.phone}</span>
                   </div>
                 </div>
                 
@@ -285,7 +351,7 @@ const Checkout = () => {
               </div>
             )}
             
-            {currentStep === 'confirm' && (
+            {currentStep === 'confirm' && bookingDetails && (
               <div className="animate-fade-in text-center">
                 <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-bollywood-red mb-6">
                   <Check size={32} className="text-white" />
@@ -315,7 +381,9 @@ const Checkout = () => {
                     </div>
                     <div className="flex justify-between">
                       <span className="text-white/70">Booking ID:</span>
-                      <span className="text-white font-medium">BN{Math.floor(Math.random() * 10000)}</span>
+                      <span className="text-white font-medium">
+                        {(bookingDetails as any).bookingId || `BN${Math.floor(Math.random() * 10000)}`}
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -334,9 +402,12 @@ const Checkout = () => {
               <div className="flex justify-end">
                 <button
                   onClick={handleNext}
-                  className="bg-bollywood-red text-white px-6 py-3 rounded-lg hover:bg-opacity-90 transition-colors"
+                  disabled={loading}
+                  className={`bg-bollywood-red text-white px-6 py-3 rounded-lg hover:bg-opacity-90 transition-colors ${
+                    loading ? 'opacity-70 cursor-not-allowed' : ''
+                  }`}
                 >
-                  {currentStep === 'payment' ? 'Complete Payment' : 'Continue'}
+                  {loading ? 'Processing...' : currentStep === 'payment' ? 'Complete Payment' : 'Continue'}
                 </button>
               </div>
             )}
