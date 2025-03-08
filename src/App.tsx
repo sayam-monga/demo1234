@@ -9,6 +9,9 @@ import Checkout from "./pages/Checkout";
 import MyPasses from "./pages/MyPasses";
 import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
+import ContactUs from "./pages/ContactUs";
+import Terms from "./pages/Terms";
+import RefundPolicy from "./pages/Refund";
 
 const queryClient = new QueryClient();
 
@@ -38,7 +41,11 @@ const App = () => {
             <Route path="/" element={<Index />} />
             <Route path="/checkout" element={<Checkout />} />
             <Route path="/my-passes" element={<MyPasses />} />
+            <Route path="/ContactUs" element={<ContactUs />} />
+            <Route path="/Terms" element={<Terms />} />
             <Route path="/auth" element={<Auth />} />
+            <Route path="/refund" element={<RefundPolicy />} />
+            {/* <Route path="/privacy" element={<PrivacyPolicy />} /> */}
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
