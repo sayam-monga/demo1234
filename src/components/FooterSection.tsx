@@ -33,16 +33,24 @@ const FooterSection = () => {
                 </li>
                 <li>
                   <Link
-                    to="/terms"
+                    to="https://merchant.razorpay.com/policy/Q3r6azfgbxrH03/terms"
                     className="text-white/70 hover:text-bollywood-red transition-colors"
                   >
                     Terms & Conditions
                   </Link>
                 </li>
+                <li>
+                  <Link
+                    to="https://merchant.razorpay.com/policy/Q3r6azfgbxrH03/privacy"
+                    className="text-white/70 hover:text-bollywood-red transition-colors"
+                  >
+                    Privacy Policy
+                  </Link>
+                </li>
 
                 <li>
                   <Link
-                    to="/refund"
+                    to="/https://merchant.razorpay.com/policy/Q3r6azfgbxrH03/refund"
                     className="text-white/70 hover:text-bollywood-red transition-colors"
                   >
                     Refund Policy
@@ -50,7 +58,7 @@ const FooterSection = () => {
                 </li>
                 <li>
                   <Link
-                    to="/ContactUs"
+                    to="/https://merchant.razorpay.com/policy/Q3r6azfgbxrH03/contact_us"
                     className="text-white/70 hover:text-bollywood-red transition-colors"
                   >
                     Contact
