@@ -13,7 +13,7 @@ const ticketTypes = [
     description: "Individual package with all party amenities",
     features: [
       "Entry for one person",
-      "Welcome drink",
+      "Neon Bands and Glow Sticks",
       "Access to dance floor",
       "Photo booth access",
     ],
@@ -24,7 +24,7 @@ const ticketTypes = [
     description: "Premium package for two with special benefits",
     features: [
       "Entry for two persons",
-      "Two welcome drinks",
+      "Neon Bands,Glow Sticks and props",
       "Access to dance floor",
       "Photo booth access",
     ],
