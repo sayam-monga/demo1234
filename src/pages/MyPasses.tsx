@@ -165,14 +165,14 @@ const MyPasses = () => {
                         <CalendarDays className="text-bollywood-red w-5 h-5 mr-2" />
                         <div>
                           <p className="text-white/60 text-xs">Date</p>
-                          <p className="text-white">July 15, 2023</p>
+                          <p className="text-white">March 25, 2025</p>
                         </div>
                       </div>
                       <div className="flex items-center">
                         <Clock className="text-bollywood-red w-5 h-5 mr-2" />
                         <div>
                           <p className="text-white/60 text-xs">Time</p>
-                          <p className="text-white">9:00 PM onwards</p>
+                          <p className="text-white">5:30 PM onwards</p>
                         </div>
                       </div>
                       <div className="flex items-center">
