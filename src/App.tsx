@@ -42,7 +42,7 @@ const App = () => {
             <Route path="/checkout" element={<Checkout />} />
             <Route path="/my-passes" element={<MyPasses />} />
             <Route path="/ContactUs" element={<ContactUs />} />
-            <Route path="/Terms" element={<Terms />} />
+            <Route path="/terms" element={<Terms />} />
             <Route path="/auth" element={<Auth />} />
             <Route path="/refund" element={<RefundPolicy />} />
             {/* <Route path="/privacy" element={<PrivacyPolicy />} /> */}
