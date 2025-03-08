@@ -101,7 +101,7 @@ const FooterSection = () => {
           </div>
         </div>
       </footer>
-      <footer className="bg-bollywood-dark-accent py-12 px-4 border-t border-white/10">
+      {/* <footer className="bg-bollywood-dark-accent py-12 px-4 border-t border-white/10">
         <div className="container flex flex-col items-center justify-center gap-2">
           <p className="flex items-center gap-1.5 text-sm font-medium text-white/80">
             Made with{" "}
@@ -115,7 +115,7 @@ const FooterSection = () => {
             © {new Date().getFullYear()} True Ticket. All rights reserved.
           </p>
         </div>
-      </footer>
+      </footer> */}
     </div>
   );
 };

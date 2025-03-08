@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { PlusCircle, MinusCircle, Info, Users, User } from "lucide-react";
 import { Link } from "react-router-dom";
+import { Button } from "./ui/button";
 
 interface TicketCardProps {
   type: "STAG" | "COUPLE";
@@ -37,6 +38,10 @@ const TicketCard = ({
   };
 
   const capacityPercentage = Math.floor(Math.random() * 30) + 60; // Random between 60-90%
+
+  function handelClick() {
+    console.log("clicked");
+  }
 
   return (
     <div
@@ -91,8 +96,8 @@ const TicketCard = ({
 
         {/* Quantity selector */}
         <div className="flex items-center justify-between mb-5">
-          <div className="text-white/80 text-sm">Quantity:</div>
-          <div className="flex items-center space-x-4">
+          {/* <div className="text-white/80 text-sm">Quantity:</div> */}
+          {/* <div className="flex items-center space-x-4">
             <button
               className="w-8 h-8 rounded-full flex items-center justify-center bg-white/10 text-white hover:bg-bollywood-red/20 transition-colors"
               onClick={decrementQuantity}
@@ -110,31 +115,42 @@ const TicketCard = ({
             >
               <PlusCircle size={18} />
             </button>
-          </div>
+          </div> */}
         </div>
         <hr className="py-2" />
         {/* Total */}
-        <div className="flex justify-between items-center mb-5">
+        {/* <div className="flex justify-between items-center mb-5">
           <div className="text-white/80">Total:</div>
           <div className="text-xl font-bold text-white">
             ₹{price * quantity}
           </div>
-        </div>
+        </div> */}
 
         {/* Buy button */}
-        <Link
+        {/* <Link
           to={quantity > 0 ? "/checkout" : "#"}
           state={
             quantity > 0 ? { ticketType: type, quantity, price } : undefined
           }
-          className={`w-full block text-center py-3 rounded-lg font-medium transition-all duration-300 ${
-            quantity > 0
-              ? "bg-bollywood-red text-white hover:shadow-red-glow"
-              : "bg-white/10 text-white/50 cursor-not-allowed"
-          }`}
+          className={`w-full block text-center py-3 rounded-lg font-medium transition-all duration-300 
+            // quantity > 0
+              // ? 
+              bg-bollywood-red text-white hover:shadow-red-glow"
+              // : "bg-white/10 text-white/50 cursor-not-allowed"
+          `}
         >
-          {quantity > 0 ? "Buy Now" : "Select Quantity"}
-        </Link>
+          {quantity > 0 ? "Buy Now" : "Select Quantity"} */}
+
+        {/* </Link> */}
+        <Button
+          className="w-full text-center py-3 rounded-lg transition-all duration-300 font-medium bg-bollywood-red text-white hover:shadow-red-glow"
+          onClick={() =>
+            (window.location.href =
+              "https://pages.razorpay.com/stores/st_Q4MV2pZHUKnM9g")
+          }
+        >
+          Buy Now
+        </Button>
       </div>
     </div>
   );

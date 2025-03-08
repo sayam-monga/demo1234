@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Calendar, MapPin, Clock, ChevronDown } from "lucide-react";
 import { Link } from "react-router-dom";
+import { Button } from "./ui/button";
 
 const Hero = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -91,12 +92,15 @@ const Hero = () => {
             isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
           }`}
         >
-          <Link
-            to="/checkout"
+          <Button
             className="bg-bollywood-red text-white px-6 py-3 rounded-xl text-lg font-medium shadow-lg hover:bg-opacity-90 hover:shadow-red-glow transition-all duration-300 animate-float"
+            onClick={() =>
+              (window.location.href =
+                "https://pages.razorpay.com/stores/st_Q4MV2pZHUKnM9g")
+            }
           >
             Get Your Tickets Now
-          </Link>
+          </Button>
         </div>
       </div>
 
