@@ -162,7 +162,9 @@ const Checkout = () => {
         amount: orderResponse.data.amount,
         currency: orderResponse.data.currency,
         name: "Bollywood Night",
-        description: `Tickets: ${selectedTickets.map((t) => `${t.type} x ${t.quantity}`).join(", ")}`,
+        description: `Tickets: ${selectedTickets
+          .map((t) => `${t.type} x ${t.quantity}`)
+          .join(", ")}`,
         order_id: orderResponse.data.id,
         handler: async function (response: any) {
           try {
@@ -290,10 +292,10 @@ const Checkout = () => {
                       currentStep === step.id
                         ? "bg-bollywood-red text-white"
                         : steps.indexOf(
-                              steps.find((s) => s.id === currentStep)!
-                            ) > index
-                          ? "bg-bollywood-red text-white"
-                          : "bg-white/10 text-white/50"
+                            steps.find((s) => s.id === currentStep)!
+                          ) > index
+                        ? "bg-bollywood-red text-white"
+                        : "bg-white/10 text-white/50"
                     } z-10`}
                   >
                     {steps.indexOf(steps.find((s) => s.id === currentStep)!) >
@@ -561,7 +563,7 @@ const Checkout = () => {
                       </a>{" "}
                       and{" "}
                       <a
-                        href="https://merchant.razorpay.com/policy/Q3r6azfgbxrH03/refund"
+                        href="https://merchant.razorpay.com/policy/Q3r6azfgbxrH03/privacy"
                         className="text-bollywood-red"
                       >
                         Privacy Policy
@@ -718,8 +720,8 @@ const Checkout = () => {
                   {loading
                     ? "Processing..."
                     : currentStep === "payment"
-                      ? "Complete Payment"
-                      : "Continue"}
+                    ? "Complete Payment"
+                    : "Continue"}
                 </button>
               </div>
             )}
